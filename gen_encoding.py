@@ -24,5 +24,11 @@ def generate_encoding(std_images):
 
 print("Encoding Started ...")
 encoding_list = generate_encoding(std_images)
+encoding_list_with_ids = [encoding_list, std_ids]
 print(encoding_list)
 print("Encoding Complete")
+
+file = open("EncodeFile.p", 'wb')
+pickle.dump(encoding_list_with_ids, file)
+file.close()
+print("File Saved")
