@@ -1,5 +1,6 @@
 import cv2
 import os
+import pickle
 
 cap = cv2.VideoCapture(0)
 
@@ -9,6 +10,9 @@ img_bg = cv2.imread('Resources/background.png')
 folder_path = 'Resources/Modes'
 img_names = os.listdir(folder_path)
 mode_images = []
+
+encodings_with_ids = pickle.load(open('EncodeFile.p', 'rb'))
+encoding_list, std_ids = encodings_with_ids
 
 for path in img_names:
     mode_images.append(cv2.imread(os.path.join(folder_path, path)))
