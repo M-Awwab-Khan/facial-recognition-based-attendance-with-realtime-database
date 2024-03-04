@@ -1,6 +1,7 @@
 import cv2
 import os
 import pickle
+# import face_recognition
 
 cap = cv2.VideoCapture(0)
 
@@ -20,6 +21,8 @@ for path in img_names:
 while True:
     success, img = cap.read()
     img = cv2.resize(img, (640, 480)) 
+    # imgS = cv2.resize(img, (0, 0), None, 0.25, 0.25)
+    # imgS = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     img_bg[162:162+480, 55:55 + 640] = img
     img_bg[44:44 + 633, 808:808 + 414] = mode_images[1]
