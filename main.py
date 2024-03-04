@@ -3,6 +3,7 @@ import os
 import pickle
 import numpy as np
 import face_recognition
+import cvzone
 
 cap = cv2.VideoCapture(0)
 
@@ -37,7 +38,11 @@ while True:
         
         match_index = np.argmin(face_distance)
         if matches[match_index]:
-            print('Known face detected', std_ids[match_index])
+            y1, x2, y2, x1 = current_face
+            y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
+            bbox = 55 + x1, 162 + y1, x2 - x1, y2 - y1
+            img_bg = cvzone.cornerRect(img_bg, bbox, rt=0)
+            # print('Known face detected', std_ids[match_index])
 
     # cv2.imshow("Webcam", img)
     cv2.imshow('Facial Attendance', img_bg)
