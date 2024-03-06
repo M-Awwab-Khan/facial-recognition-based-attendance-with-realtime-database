@@ -4,6 +4,9 @@ import pickle
 import numpy as np
 import face_recognition
 import cvzone
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import  storage, db
 
 cap = cv2.VideoCapture(0)
 
@@ -20,6 +23,17 @@ encoding_list, std_ids = encodings_with_ids
 for path in img_names:
     mode_images.append(cv2.imread(os.path.join(folder_path, path)))
 
+cred = credentials.Certificate("firebase_key.json")
+firebase_admin.initialize_app(cred, {
+    "databaseURL": "https://facial-attendance-realtime-default-rtdb.firebaseio.com/",
+    "storageBucket": "facial-attendance-realtime.appspot.com"
+
+})
+
+mode = 0
+counter = 0
+id = -1
+
 while True:
     success, img = cap.read()
     img = cv2.resize(img, (640, 480)) 
@@ -30,7 +44,7 @@ while True:
     current_face_encoding = face_recognition.face_encodings(imgS, face_current_frame)
 
     img_bg[162:162+480, 55:55 + 640] = img
-    img_bg[44:44 + 633, 808:808 + 414] = mode_images[1]
+    img_bg[44:44 + 633, 808:808 + 414] = mode_images[mode]
 
     for current_encoding, current_face in zip(current_face_encoding, face_current_frame):
         matches = face_recognition.compare_faces(encoding_list, current_encoding)
@@ -42,7 +56,19 @@ while True:
             y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
             bbox = 55 + x1, 162 + y1, x2 - x1, y2 - y1
             img_bg = cvzone.cornerRect(img_bg, bbox, rt=0)
-            # print('Known face detected', std_ids[match_index])
+            id = std_ids[match_index]
+
+            if counter == 0:
+                counter = 1
+                mode = 1
+
+    if counter == 1:
+        print('inside test block')
+        student_info = db.reference(f'Students/{id}').get()
+
+    if counter != 0:
+        counter += 1
+        cv2.putText(img_bg, str(student_info['total_attendance']), (861, 125), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 1)
 
     # cv2.imshow("Webcam", img)
     cv2.imshow('Facial Attendance', img_bg)
