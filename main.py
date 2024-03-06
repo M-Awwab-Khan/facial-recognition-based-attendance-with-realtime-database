@@ -30,6 +30,8 @@ firebase_admin.initialize_app(cred, {
 
 })
 
+bucket = storage.bucket()
+
 mode = 0
 counter = 0
 id = -1
@@ -65,6 +67,10 @@ while True:
     if counter == 1:
         print('inside test block')
         student_info = db.reference(f'Students/{id}').get()
+        # Get the Image from the storage
+        blob = bucket.get_blob(f'Images/{id}.png')
+        array = np.frombuffer(blob.download_as_string(), np.uint8)
+        img_std = cv2.imdecode(array, cv2.COLOR_BGRA2BGR)
 
     if counter != 0:
         counter += 1
@@ -79,10 +85,11 @@ while True:
                     cv2.FONT_HERSHEY_DUPLEX, 0.6, (100, 100, 100), 1)
         cv2.putText(img_bg, str(student_info['batch']), (1125, 625),
                     cv2.FONT_HERSHEY_DUPLEX, 0.6, (100, 100, 100), 1)
-        (w, h), _ = cv2.getTextSize(student_info['name'], cv2.FONT_HERSHEY_COMPLEX, 1, 1)
+        (w, h), _ = cv2.getTextSize(student_info['name'], cv2.FONT_HERSHEY_DUPLEX, 1, 1)
         offset = (414 - w) // 2
         cv2.putText(img_bg, str(student_info['name']), (808 + offset, 445),
                     cv2.FONT_HERSHEY_DUPLEX, 1, (50, 50, 50), 1)
+        img_bg[175:175 + 216, 909:909 + 216] = img_std
 
 
     # cv2.imshow("Webcam", img)
