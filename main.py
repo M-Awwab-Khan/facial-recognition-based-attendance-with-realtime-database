@@ -71,6 +71,9 @@ while True:
         blob = bucket.get_blob(f'Images/{id}.png')
         array = np.frombuffer(blob.download_as_string(), np.uint8)
         img_std = cv2.imdecode(array, cv2.COLOR_BGRA2BGR)
+        ref = db.reference(f'Students/{id}')
+        student_info['total_attendance'] += 1
+        ref.child('total_attendance').set(student_info['total_attendance'])
 
     if counter != 0:
         counter += 1
