@@ -68,7 +68,22 @@ while True:
 
     if counter != 0:
         counter += 1
-        cv2.putText(img_bg, str(student_info['total_attendance']), (861, 125), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 1)
+        cv2.putText(img_bg, str(student_info['total_attendance']), (861, 125), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1)
+        cv2.putText(img_bg, str(student_info['total_attendance']), (861, 125),
+                                cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1)
+        cv2.putText(img_bg, str(student_info['major']), (1006, 550),
+                    cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(img_bg, str(id), (1006, 493),
+                    cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(img_bg, str(student_info['standing']), (910, 625),
+                    cv2.FONT_HERSHEY_DUPLEX, 0.6, (100, 100, 100), 1)
+        cv2.putText(img_bg, str(student_info['year']), (1025, 625),
+                    cv2.FONT_HERSHEY_DUPLEX, 0.6, (100, 100, 100), 1)
+        cv2.putText(img_bg, str(student_info['batch']), (1125, 625),
+                    cv2.FONT_HERSHEY_DUPLEX, 0.6, (100, 100, 100), 1)
+        cv2.putText(img_bg, str(student_info['name']), (808, 445),
+                    cv2.FONT_HERSHEY_DUPLEX, 1, (50, 50, 50), 1)
+
 
     # cv2.imshow("Webcam", img)
     cv2.imshow('Facial Attendance', img_bg)
