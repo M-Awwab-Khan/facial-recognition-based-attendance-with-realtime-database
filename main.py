@@ -75,7 +75,7 @@ while True:
         student_info['total_attendance'] += 1
         ref.child('total_attendance').set(student_info['total_attendance'])
 
-    if counter != 0:
+    if counter <= 10 and counter != 0:
         counter += 1
         cv2.putText(img_bg, str(student_info['total_attendance']), (861, 125), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1)
         cv2.putText(img_bg, str(student_info['major']), (1006, 550),
@@ -93,6 +93,10 @@ while True:
         cv2.putText(img_bg, str(student_info['name']), (808 + offset, 445),
                     cv2.FONT_HERSHEY_DUPLEX, 1, (50, 50, 50), 1)
         img_bg[175:175 + 216, 909:909 + 216] = img_std
+
+    if counter > 10 and counter <= 20:
+        mode = 2
+
 
 
     # cv2.imshow("Webcam", img)
