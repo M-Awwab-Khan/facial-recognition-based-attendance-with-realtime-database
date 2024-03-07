@@ -7,6 +7,7 @@ import cvzone
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import  storage, db
+from datetime import datetime
 
 cap = cv2.VideoCapture(0)
 
@@ -73,7 +74,15 @@ while True:
         img_std = cv2.imdecode(array, cv2.COLOR_BGRA2BGR)
         ref = db.reference(f'Students/{id}')
         student_info['total_attendance'] += 1
+        # Update data of attendance
+        last_attendance_time = datetime.strptime(student_info['last_attendance_time'],
+                                            "%Y-%m-%d %H:%M:%S")
+        time_between = (datetime.now() - last_attendance_time).total_seconds()
+        print(time_between)
+        ref = db.reference(f'Students/{id}')
+        student_info['total_attendance'] += 1
         ref.child('total_attendance').set(student_info['total_attendance'])
+        ref.child('last_attendance_time').set(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     if counter <= 10 and counter != 0:
         counter += 1
