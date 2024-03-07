@@ -62,6 +62,9 @@ while True:
                 id = std_ids[match_index]
 
                 if counter == 0:
+                    cvzone.putTextRect(img_bg, "Loading", (275, 400))
+                    cv2.imshow("Facial Attendance", img_bg)
+                    cv2.waitKey(1)
                     counter = 1
                     mode = 1
 
