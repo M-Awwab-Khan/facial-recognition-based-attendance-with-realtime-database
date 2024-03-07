@@ -95,7 +95,15 @@ while True:
         img_bg[175:175 + 216, 909:909 + 216] = img_std
 
     if counter > 10 and counter <= 20:
+        counter += 1
         mode = 2
+
+    if counter >= 20:
+        counter = 0
+        mode = 0
+        student_info = []
+        img_std = []
+        
 
 
 
