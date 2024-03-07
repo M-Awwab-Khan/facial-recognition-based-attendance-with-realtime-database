@@ -48,7 +48,6 @@ while True:
 
     img_bg[162:162+480, 55:55 + 640] = img
     img_bg[44:44 + 633, 808:808 + 414] = mode_images[mode]
-
     for current_encoding, current_face in zip(current_face_encoding, face_current_frame):
         matches = face_recognition.compare_faces(encoding_list, current_encoding)
         face_distance = face_recognition.face_distance(encoding_list, current_encoding)
@@ -78,13 +77,16 @@ while True:
         last_attendance_time = datetime.strptime(student_info['last_attendance_time'],
                                             "%Y-%m-%d %H:%M:%S")
         time_between = (datetime.now() - last_attendance_time).total_seconds()
-        print(time_between)
-        ref = db.reference(f'Students/{id}')
-        student_info['total_attendance'] += 1
-        ref.child('total_attendance').set(student_info['total_attendance'])
-        ref.child('last_attendance_time').set(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        if time_between > 30:
+            ref = db.reference(f'Students/{id}')
+            student_info['total_attendance'] += 1
+            ref.child('total_attendance').set(student_info['total_attendance'])
+            ref.child('last_attendance_time').set(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        else:
+            mode = 3
+            counter = 0
 
-    if counter <= 10 and counter != 0:
+    if counter <= 10 and counter != 0 and mode != 3:
         counter += 1
         cv2.putText(img_bg, str(student_info['total_attendance']), (861, 125), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 255, 255), 1)
         cv2.putText(img_bg, str(student_info['major']), (1006, 550),
@@ -103,11 +105,11 @@ while True:
                     cv2.FONT_HERSHEY_DUPLEX, 1, (50, 50, 50), 1)
         img_bg[175:175 + 216, 909:909 + 216] = img_std
 
-    if counter > 10 and counter <= 20:
+    if counter > 10 and counter <= 20 and mode != 3:
         counter += 1
         mode = 2
 
-    if counter >= 20:
+    if counter >= 20 and mode != 3:
         counter = 0
         mode = 0
         student_info = []
